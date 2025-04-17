@@ -17,12 +17,23 @@
 
   <!-- Search and Sort -->
   <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
-    <input
-      type="text"
-      [(ngModel)]="search"
-      placeholder="Search tasks..."
-      class="w-full sm:w-1/2 border rounded-lg px-4 py-2 focus:outline-none focus:ring focus:ring-blue-300"
-    />
+    <div class="relative w-full sm:w-1/2">
+      <input
+        type="text"
+        [(ngModel)]="search"
+        placeholder="Search"
+        class="w-full border rounded-lg px-4 py-2 pr-10 focus:outline-none focus:ring focus:ring-blue-300"
+      />
+      <button
+        *ngIf="search"
+        (click)="search = ''"
+        type="button"
+        class="absolute cursor-pointer right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-red-500"
+        aria-label="Clear search"
+      >
+        ✖
+      </button>
+    </div>
     <select
       [(ngModel)]="sortBy"
       class="w-full sm:w-1/3 border rounded-lg px-4 py-2 focus:outline-none focus:ring focus:ring-blue-300"
@@ -84,7 +95,8 @@
                 class="text-red-500 hover:text-red-700 p-2 rounded-md transition transform hover:scale-110 hover:rotate-12"
                 aria-label="Delete task"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 transition-transform duration-300 ease-in-out" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 transition-transform duration-300 ease-in-out"
+                     fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M6 18L18 6M6 6l12 12"/>
                 </svg>
