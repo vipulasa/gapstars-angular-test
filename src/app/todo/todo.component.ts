@@ -21,6 +21,8 @@ export class TodoComponent implements OnInit {
 
   showAddTodo = false;
 
+  editingTodo: TodoModel | null = null;
+
   todos: TodoModel[] = [];
 
   search = '';
@@ -143,5 +145,17 @@ export class TodoComponent implements OnInit {
     return this.todos.some(todo =>
       todo.dependencies.includes(todoId)
     );
+  }
+
+  /**
+   * Edits an existing task by cloning the given TodoModel object for safe modifications
+   * and setting the appropriate state variables for editing mode.
+   *
+   * @param {TodoModel} todo - The todo object containing the details of the task to be edited.
+   * @return {void}
+   */
+  editTask(todo: TodoModel): void {
+    this.editingTodo = { ...todo }; // clone for safe editing
+    this.showAddTodo = true;
   }
 }

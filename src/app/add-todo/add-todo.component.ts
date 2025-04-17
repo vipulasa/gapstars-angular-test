@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {TodoService} from '../services/todo.service';
 import {Priority, Recurrence, TodoModel} from '../models/todo.model';
 import {FormsModule, NgForm} from '@angular/forms';
@@ -14,7 +14,7 @@ import {CommonModule} from '@angular/common';
   templateUrl: './add-todo.component.html',
   styleUrls: ['./add-todo.component.css']
 })
-export class AddTodoComponent {
+export class AddTodoComponent implements OnInit{
 
   title = '';
 
@@ -27,9 +27,21 @@ export class AddTodoComponent {
   constructor(public todoService: TodoService) {
   }
 
+  @Input() todoToEdit: TodoModel | null = null;
+
   @Output() taskAdded = new EventEmitter<void>();
 
   @Output() closed = new EventEmitter<void>();
+
+  ngOnInit(): void {
+    if (this.todoToEdit) {
+      this.title = this.todoToEdit.title;
+      this.priority = this.todoToEdit.priority;
+      this.recurrence = this.todoToEdit.recurrence;
+      this.dependencies = [...this.todoToEdit.dependencies];
+    }
+  }
+
 
   /**
    * Determines whether the given ID exists in the dependencies list.
@@ -64,19 +76,22 @@ export class AddTodoComponent {
    * @return {void}
    */
   addTask(form: NgForm): void {
-
     if (!form || form.invalid) return;
 
-    const newTask: TodoModel = {
-      id: Date.now(),
+    const updatedTask: TodoModel = {
+      id: this.todoToEdit?.id ?? Date.now(),
       title: this.title,
-      done: false,
+      done: this.todoToEdit?.done ?? false,
       priority: this.priority,
       recurrence: this.recurrence,
       dependencies: this.dependencies
     };
 
-    this.todoService.add(newTask);
+    if (this.todoToEdit) {
+      this.todoService.update(updatedTask);
+    } else {
+      this.todoService.add(updatedTask);
+    }
 
     form.resetForm({
       priority: 'Medium',

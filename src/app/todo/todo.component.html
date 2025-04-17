@@ -12,7 +12,9 @@
 
   <!-- Add Todo Modal -->
   <div *ngIf="showAddTodo" class="mb-6">
-    <app-add-todo (taskAdded)="onTaskAdded()" (closed)="showAddTodo = false"></app-add-todo>
+    <app-add-todo (taskAdded)="onTaskAdded()"
+                  (closed)="showAddTodo = false"
+                  [todoToEdit]="editingTodo"></app-add-todo>
   </div>
 
   <!-- Search and Sort -->
@@ -89,7 +91,14 @@
                 </div>
               </div>
 
-              <!-- Trash Button -->
+              <button
+                (click)="editTask(todo); $event.stopPropagation()"
+                class="text-blue-500 hover:text-blue-700 p-2 rounded-md transition transform hover:scale-110"
+                aria-label="Edit task"
+              >
+                ✎
+              </button>
+
               <button
                 (click)="deleteTask(todo.id); $event.stopPropagation()"
                 class="text-red-500 hover:text-red-700 p-2 rounded-md transition transform hover:scale-110 hover:rotate-12"
