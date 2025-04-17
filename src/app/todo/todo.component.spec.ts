@@ -85,12 +85,28 @@ describe('TodoComponent', () => {
   });
 
   it('should not allow toggling a todo with unmet dependencies', () => {
-    const todo = component.todos.find(t => t.dependencies.length > 0);
-    if (todo) {
-      spyOn(window, 'alert');
-      component.toggleDone(todo);
-      expect(window.alert).toHaveBeenCalledWith('Cannot complete this task until dependencies are done.');
-    }
+    // Add a new todo with an unmet dependency
+    const unmetDepTodo: TodoModel = {
+      id: 99,
+      title: 'Blocked Task',
+      done: false,
+      priority: 'Low',
+      recurrence: 'None',
+      dependencies: [1] // task with ID 1 is assumed to be not done
+    };
+
+    // Ensure the dependent task exists and is NOT done
+    const dep = component.todos.find(t => t.id === 1);
+    if (dep) dep.done = false;
+
+    component.todos.push(unmetDepTodo);
+
+    spyOn(window, 'alert');
+
+    component.toggleDone(unmetDepTodo);
+
+    expect(unmetDepTodo.done).toBeFalse();
+    expect(window.alert).toHaveBeenCalledWith('Cannot complete this task until dependencies are done.');
   });
 
   it('should confirm before deleting a task', () => {
