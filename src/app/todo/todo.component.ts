@@ -28,10 +28,9 @@ export class TodoComponent implements OnInit {
   sortBy: 'priority' | 'status' = 'priority';
 
   constructor(private todoService: TodoService) {
-
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.loadTodos();
   }
 
@@ -67,7 +66,7 @@ export class TodoComponent implements OnInit {
    * @param {TodoModel} todo - The todo item to toggle the completion status for.
    * @return {void} Does not return a value.
    */
-  toggleDone(todo: TodoModel) {
+  toggleDone(todo: TodoModel): void {
     if (this.canComplete(todo)) {
       todo.done = !todo.done;
       this.todoService.update(todo);
@@ -107,7 +106,7 @@ export class TodoComponent implements OnInit {
    *
    * @return {void}
    */
-  onTaskAdded() {
+  onTaskAdded(): void {
     this.showAddTodo = false;
     this.loadTodos();
   }

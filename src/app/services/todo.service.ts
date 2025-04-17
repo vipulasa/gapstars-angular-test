@@ -2,6 +2,9 @@ import {Injectable} from '@angular/core';
 import {BehaviorSubject} from 'rxjs';
 import {TodoModel} from '../models/todo.model';
 
+// storage key defined to store the todos in local storage
+const STORAGE_KEY = 'gapstars_app_todos';
+
 /**
  * The TodoService provides functionality to manage a list of Todo items.
  * It maintains the state of Todo items and exposes reactive streams for external components to subscribe to updates.
@@ -20,24 +23,7 @@ export class TodoService {
    * This array is initialized as empty and its used to store and manage a list
    * of tasks or todo items for an application.
    */
-  private todos: TodoModel[] = [
-    {
-      id: Date.now(),
-      title: 'Sample Todo Undone',
-      done: false,
-      priority: 'Low',
-      recurrence: 'None',
-      dependencies: []
-    },
-    {
-      id: Date.now()+3,
-      title: 'Sample Todo Done',
-      done: true,
-      priority: 'High',
-      recurrence: 'None',
-      dependencies: []
-    }
-  ];
+  private todos: TodoModel[] = [];
 
   /**
    * A BehaviorSubject that holds and emits the current list of todo items.
@@ -62,6 +48,67 @@ export class TodoService {
   todos$ = this.todoSubject.asObservable();
 
   constructor() {
+    this.loadFromStorage();
+  }
+
+  /**
+   * Determines whether the runtime environment is a web browser.
+   * Checks for the presence of specific browser-related global objects such as `window` and `localStorage`.
+   *
+   * This is added to prevent errors from firing in non-browser environments (Angular SSR)
+   *
+   * @return {boolean} True if the environment is a browser, otherwise false.
+   */
+  private isBrowser(): boolean {
+    return typeof window !== 'undefined' && typeof localStorage !== 'undefined';
+  }
+
+  /**
+   * Loads the todo list data from localStorage if available.
+   * If no data is found or parsing fails, initializes with default sample data.
+   * If executed in a non-browser environment, logs a warning and exits without doing anything.
+   *
+   * @return {void}
+   */
+  private loadFromStorage(): void {
+
+    if (!this.isBrowser()) {
+      console.warn('LocalStorage not available in this environment.');
+      return;
+    }
+
+
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) {
+      try {
+        this.todos = JSON.parse(saved) as TodoModel[];
+      } catch (e) {
+        console.error('Failed to parse stored todos:', e);
+        this.todos = [];
+      }
+    } else {
+      // Add initial sample data in order to test the application
+      this.todos = [
+        {
+          id: Date.now(),
+          title: 'Sample Todo Undone',
+          done: false,
+          priority: 'Low',
+          recurrence: 'None',
+          dependencies: []
+        },
+        {
+          id: Date.now() + 1,
+          title: 'Sample Todo Done',
+          done: true,
+          priority: 'High',
+          recurrence: 'None',
+          dependencies: []
+        }
+      ];
+    }
+
+    this.updateSubject();
   }
 
   /**
@@ -73,6 +120,7 @@ export class TodoService {
    */
   private updateSubject() {
     this.todoSubject.next([...this.todos]);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(this.todos));
   }
 
   /**
