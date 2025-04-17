@@ -22,18 +22,18 @@ export class TodoService {
    */
   private todos: TodoModel[] = [
     {
-      id: 1,
-      title: 'test',
+      id: Date.now(),
+      title: 'Sample Todo Undone',
       done: false,
       priority: 'Low',
       recurrence: 'None',
       dependencies: []
     },
     {
-      id: 2,
-      title: 'testw',
-      done: false,
-      priority: 'Low',
+      id: Date.now()+3,
+      title: 'Sample Todo Done',
+      done: true,
+      priority: 'High',
       recurrence: 'None',
       dependencies: []
     }

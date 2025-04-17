@@ -32,16 +32,21 @@
     </select>
   </div>
 
+  <!-- Todo List -->
   <ng-content>
     @if ((todos | todoFilter: search : sortBy).length === 0) {
       <p class="text-center text-gray-500 italic mt-6">
-        No todos found. Add a todo by clicking on the Add Todo button
+        No todos found. Add a todo by clicking on the Add Todo button.
       </p>
     } @else {
       <ul class="space-y-3">
         @for (todo of todos | todoFilter: search : sortBy; track todo.id) {
-          <li class="flex flex-col gap-2 bg-white shadow-sm border rounded-lg px-4 py-3">
-            <!-- Top Row -->
+          <li
+            class="flex flex-col gap-2 border rounded-lg px-4 py-3 shadow-sm transition cursor-pointer"
+            [ngClass]="{ 'bg-gray-100': todo.done, 'bg-white': !todo.done }"
+            (click)="toggleDone(todo)"
+          >
+            <!-- Top Section -->
             <div class="flex items-center justify-between">
               <div class="flex items-center gap-3">
                 <input
@@ -49,26 +54,44 @@
                   class="accent-blue-600"
                   [checked]="todo.done"
                   [disabled]="!canComplete(todo)"
-                  (change)="toggleDone(todo)"
+                  (click)="$event.stopPropagation()"
                 />
                 <div>
-                  <p class="font-medium" [class.line-through]="todo.done">
+                  <p class="font-medium text-base" [class.line-through]="todo.done">
                     {{ todo.title }}
                   </p>
-                  <p class="text-sm text-gray-500">
-                    {{ todo.priority }} • {{ todo.recurrence }}
+                  <p class="text-sm text-gray-500 flex flex-wrap items-center gap-2 mt-1">
+                    <span>Priority:</span>
+                    <span
+                      class="px-2 py-0.5 text-xs font-semibold rounded-full"
+                      [ngClass]="{
+                        'bg-red-100 text-red-600': todo.priority === 'High',
+                        'bg-yellow-100 text-yellow-700': todo.priority === 'Medium',
+                        'bg-green-100 text-green-700': todo.priority === 'Low'
+                      }"
+                    >
+                      {{ todo.priority }}
+                    </span>
+                    <span>•</span>
+                    <span>Recurrence: {{ todo.recurrence }}</span>
                   </p>
                 </div>
               </div>
+
+              <!-- Trash Button -->
               <button
-                (click)="deleteTask(todo.id)"
-                class="text-red-500 hover:text-red-700 text-sm"
+                (click)="deleteTask(todo.id); $event.stopPropagation()"
+                class="text-red-500 hover:text-red-700 p-2 rounded-md transition transform hover:scale-110 hover:rotate-12"
+                aria-label="Delete task"
               >
-                Delete
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 transition-transform duration-300 ease-in-out" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M6 18L18 6M6 6l12 12"/>
+                </svg>
               </button>
             </div>
 
-            <!-- Dependency Info -->
+            <!-- Dependencies -->
             <div *ngIf="todo.dependencies.length" class="text-sm text-gray-500 pl-8">
               Depends on:
               <ul class="list-disc ml-4">
