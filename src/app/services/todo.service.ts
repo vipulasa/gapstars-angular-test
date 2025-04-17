@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject} from 'rxjs';
-import {Priority, Recurrence, TodoModel} from '../models/todo.model';
+import {TodoModel} from '../models/todo.model';
 
 /**
  * The TodoService provides functionality to manage a list of Todo items.

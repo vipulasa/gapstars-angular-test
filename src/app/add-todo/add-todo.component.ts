@@ -3,14 +3,12 @@ import { TodoService } from '../services/todo.service';
 import { Priority, Recurrence, TodoModel } from '../models/todo.model';
 import {FormsModule, NgForm} from '@angular/forms';
 import {CommonModule} from '@angular/common';
-import {TodoFilterPipe} from '../filters/todo-filter.pipe';
 
 @Component({
   selector: 'app-add-todo',
   imports: [
     FormsModule,
-    CommonModule,
-    TodoFilterPipe
+    CommonModule
   ],
   standalone: true,
   templateUrl: './add-todo.component.html',

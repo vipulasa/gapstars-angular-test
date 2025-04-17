@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {CommonModule, NgForOf} from '@angular/common';
+import {CommonModule} from '@angular/common';
 import {TodoService} from '../services/todo.service';
 import {FormsModule} from '@angular/forms';
-import {TodoModel, Priority, Recurrence} from '../models/todo.model';
+import {TodoModel} from '../models/todo.model';
 import {AddTodoComponent} from '../add-todo/add-todo.component';
 import {TodoFilterPipe} from '../filters/todo-filter.pipe';
 
