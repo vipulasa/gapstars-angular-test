@@ -6,22 +6,7 @@ describe('TodoService', () => {
 
   let service: TodoService;
 
-  const STORAGE_KEY = 'gapstars_app_todos';
-
   let mockStorage: { [key: string]: string } = {};
-
-  const mockLocalStorage = {
-    getItem: (key: string) => mockStorage[key] || null,
-    setItem: (key: string, value: string) => {
-      mockStorage[key] = value;
-    },
-    removeItem: (key: string) => {
-      delete mockStorage[key];
-    },
-    clear: () => {
-      Object.keys(mockStorage).forEach(key => delete mockStorage[key]);
-    }
-  };
 
   beforeEach(() => {
     spyOn(localStorage, 'getItem').and.callFake((key: string) => mockStorage[key] || null);

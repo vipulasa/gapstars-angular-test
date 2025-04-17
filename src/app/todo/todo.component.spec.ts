@@ -3,9 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { TodoComponent } from './todo.component';
 import { TodoService } from '../services/todo.service';
 import { TodoModel } from '../models/todo.model';
-import { AddTodoComponent } from '../add-todo/add-todo.component';
 import { TodoFilterPipe } from '../filters/todo-filter.pipe';
-import { of } from 'rxjs';
 
 // Mock data
 const sampleTodos: TodoModel[] = [
