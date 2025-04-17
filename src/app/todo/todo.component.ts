@@ -155,7 +155,17 @@ export class TodoComponent implements OnInit {
    * @return {void}
    */
   editTask(todo: TodoModel): void {
-    this.editingTodo = { ...todo }; // clone for safe editing
+    this.editingTodo = {...todo}; // clone for safe editing
     this.showAddTodo = true;
+  }
+
+  /**
+   * Toggles the visibility of the modal and resets the editing state.
+   *
+   * @return {void}
+   */
+  toggleModal(): void {
+    this.showAddTodo = !this.showAddTodo
+    this.editingTodo = null;
   }
 }

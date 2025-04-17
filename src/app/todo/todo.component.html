@@ -3,7 +3,7 @@
   <div class="flex items-center justify-between mb-6">
     <h2 class="text-2xl font-semibold">My Todos</h2>
     <button
-      (click)="showAddTodo = !showAddTodo"
+      (click)="toggleModal()"
       class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
     >
       {{ showAddTodo ? 'Close' : 'Add Todo' }}
