@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { TodoModel } from '../models/todo.model';
+import {Injectable} from '@angular/core';
+import {BehaviorSubject} from 'rxjs';
+import {Priority, Recurrence, TodoModel} from '../models/todo.model';
 
 /**
  * The TodoService provides functionality to manage a list of Todo items.
@@ -20,7 +20,24 @@ export class TodoService {
    * This array is initialized as empty and its used to store and manage a list
    * of tasks or todo items for an application.
    */
-  private todos: TodoModel[] = [];
+  private todos: TodoModel[] = [
+    {
+      id: 1,
+      title: 'test',
+      done: false,
+      priority: 'Low',
+      recurrence: 'None',
+      dependencies: []
+    },
+    {
+      id: 2,
+      title: 'testw',
+      done: false,
+      priority: 'Low',
+      recurrence: 'None',
+      dependencies: []
+    }
+  ];
 
   /**
    * A BehaviorSubject that holds and emits the current list of todo items.
@@ -44,7 +61,8 @@ export class TodoService {
    */
   todos$ = this.todoSubject.asObservable();
 
-  constructor() {}
+  constructor() {
+  }
 
   /**
    * Updates the state of the subject with the current list of todos.
@@ -99,5 +117,9 @@ export class TodoService {
    */
   getById(id: number): TodoModel | undefined {
     return this.todos.find(t => t.id === id);
+  }
+
+  getAll(): TodoModel[] {
+    return this.todos;
   }
 }

@@ -1,0 +1,111 @@
+<div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+  <form
+    #form="ngForm"
+    (ngSubmit)="addTask(form)"
+    class="p-6 rounded-xl shadow-xl w-full max-w-lg space-y-4"
+    novalidate
+  >
+    <div class="bg-white rounded-2xl shadow-xl p-8 w-full max-w-lg space-y-4">
+      <h3 class="text-xl font-semibold mb-4">Add Task</h3>
+
+      <div class="space-y-1">
+        <label for="task-title" class="block font-medium text-sm text-gray-700">Todo</label>
+        <input
+          id="task-title"
+          type="text"
+          [(ngModel)]="title"
+          name="title"
+          required
+          #titleRef="ngModel"
+          placeholder="Enter todo"
+          class="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring focus:ring-blue-300"
+        />
+        <div *ngIf="titleRef.touched && titleRef.invalid" class="text-sm text-red-600">
+          Title is required.
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-7">
+        <div class="space-y-1">
+          <label for="task-priority" class="block font-medium text-sm text-gray-700">Priority</label>
+          <select
+            id="task-priority"
+            [(ngModel)]="priority"
+            name="priority"
+            required
+            #priorityRef="ngModel"
+            class="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring focus:ring-blue-300"
+          >
+            <option value="" disabled>Select priority</option>
+            <option *ngFor="let p of ['Low', 'Medium', 'High']" [value]="p">{{ p }}</option>
+          </select>
+          <div *ngIf="priorityRef.touched && priorityRef.invalid" class="text-sm text-red-600">
+            Priority is required.
+          </div>
+        </div>
+
+        <div class="space-y-1">
+          <label for="task-recurrence" class="block font-medium text-sm text-gray-700">Recurrence</label>
+          <select
+            id="task-recurrence"
+            [(ngModel)]="recurrence"
+            name="recurrence"
+            required
+            #recurrenceRef="ngModel"
+            class="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring focus:ring-blue-300"
+          >
+            <option value="" disabled>Select recurrence</option>
+            <option *ngFor="let r of ['None', 'Daily', 'Weekly', 'Monthly']" [value]="r">{{ r }}</option>
+          </select>
+          <div *ngIf="recurrenceRef.touched && recurrenceRef.invalid" class="text-sm text-red-600">
+            Recurrence is required.
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <label class="font-medium block mb-2 text-sm text-gray-700">Dependencies</label>
+        <div class="space-y-2 max-h-40 overflow-y-auto pr-2">
+          @if (todoService.getAll().length === 0) {
+            <p class="text-center text-gray-500 italic text-sm">
+              You need to have at least one todo in order to select them as dependencies
+            </p>
+          } @else {
+            @for (task of todoService.getAll(); track task.id) {
+              <div class="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  [id]="'task-' + task.id"
+                  [value]="task.id"
+                  [checked]="isChecked(task.id)"
+                  (change)="toggleDependency(task.id)"
+                  class="accent-blue-600"
+                />
+                <label [for]="'task-' + task.id" class="text-sm text-gray-800">
+                  {{ task.title }}
+                </label>
+              </div>
+            }
+          }
+        </div>
+      </div>
+
+      <div class="flex justify-between">
+        <button
+          type="button"
+          (click)="closed.emit()"
+          class="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700 transition disabled:opacity-50"
+        >
+          Cancel
+        </button>
+        <button
+          type="submit"
+          [disabled]="form.invalid"
+          class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          Add
+        </button>
+      </div>
+    </div>
+  </form>
+</div>
